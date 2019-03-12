@@ -3,7 +3,7 @@ var app = express();
 var PORT = 8080; // default port 8080
 
 function generateRandomString() {
- var output =Math.random().toString(36).substr(2, 5);
+ var output = Math.random().toString(36).substr(2, 5);
  return output;
 }
 
@@ -32,14 +32,17 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  generateRandomString(req.body);  // Log the POST request body to the console
-  res.send(generateRandomString());         // Respond with 'Ok' (we will replace this)
+  const longURL = req.body.longURL
+  const shortURL = generateRandomString()
+  urlDatabase[shortURL] = longURL
+  res.redirect(`/urls/${shortURL}`);         // Respond with 'Ok' (we will replace this)
 });
 
 app.get("/urls", (req, res) => {
-    let templateVars = { urls: urlDatabase };
+    let templateVars = { urls: urlDatabase, };
     res.render("urls_index", templateVars);
   });
+
   app.get("/urls/:shortURL", (req, res) => {
     let templateVars = { shortURL: req.params.shortURL, longURL:urlDatabase[req.params.shortURL] }
     res.render("urls_show", templateVars);
