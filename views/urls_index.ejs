@@ -21,9 +21,8 @@
         <li><%= url %> - <a href= <%=  urls[url]  %>> <%= urls[url] %> </a>
           <form method="POST" action="/urls/<%= url %>/delete">
             <div class="form-group mb-2">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary">Delete</button>
             </div>
-          
           </form>
         </li>
     <% }; %>
