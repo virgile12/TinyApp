@@ -1,9 +1,11 @@
-var express = require("express");
-var app = express();
-var PORT = 8080; // default port 8080
+const express = require("express");
+const app = express();
+const cookieParser = require('cookie-parser')
+const PORT = 8080; // default port 8080
+app.use(cookieParser())
 
 function generateRandomString() {
- var output = Math.random().toString(36).substr(2, 5);
+ let output = Math.random().toString(36).substr(2, 5);
  return output;
 }
 
@@ -67,6 +69,12 @@ app.get("/urls", (req, res) => {
   });
   app.get("/urls/:shortURL", (req, res) => {
     res.render(`/urls/${shortURL}`);
+  });
+
+  app.post("/login", (req, res) => {
+    let cookieOutput = req.body.username;
+    res.cookie("username", cookieOutput);
+    res.redirect("/urls");
   });
 
 app.get("/hello", (req, res) => {
