@@ -9,10 +9,9 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-    
     <h1>
-        <% include ./partials/_headers %>
-      </h1>
+      <% include ./partials/_headers %>
+    </h1>
     <h3> ShortUrl : <strong><%= shortURL %> </strong></h3>
   <form class="form-inline" action="/urls/<%= shortURL %>" method="POST">
     <div class="form-group mb-2">
@@ -21,6 +20,7 @@
       <button type="submit" class="btn btn-primary">Update</button>
     </div>
   </form>
+    
   
 </body>
 </html>
