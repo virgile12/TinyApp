@@ -1,12 +1,11 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <h1> This is a Title </h1>
-    <a href="/urls">Home</a>
+    
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>TinyApp</title>
   <form class="form-inline" action="/login" method="POST">
@@ -14,4 +13,19 @@
       <input class="form-control" type="text" name="username" placeholder="" style="width: 300px; margin: 1em">
       <button type="login" class="btn btn-primary">Login</button>
   </form>
-</head>
+</head> -->
+<a href="/urls">Home</a>
+<% if (username) {%>
+<h1>Welcome user : <%= username %></h1>
+<form method="POST" action="/logout">
+  <div class="form-group mb-2"> 
+    <button type="submit" class="btn btn-primary">Logout</button>
+  </div>
+</form>
+<%} else {%>
+<form class="form-inline" action="/login" method="POST">
+  <label for="username">username</label>
+  <input class="form-control" type="text" name="username" placeholder="" style="width: 300px; margin: 1em">
+  <button type="submit" class="btn btn-primary">Login</button>
+</form>
+<% } %>

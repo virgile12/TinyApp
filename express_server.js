@@ -37,16 +37,16 @@ app.post("/urls", (req, res) => {
   const longURL = req.body.longURL
   const shortURL = generateRandomString()
   urlDatabase[shortURL] = longURL
-  res.redirect(`/urls/${shortURL}`);         // Respond with 'Ok' (we will replace this)
+  res.redirect(`/urls/${shortURL}`);
 });
 
 app.get("/urls", (req, res) => {
-    let templateVars = { urls: urlDatabase, };
+    let templateVars = { urls: urlDatabase, username: req.cookies["username"] };
     res.render("urls_index", templateVars);
   });
 
   app.get("/urls/:shortURL", (req, res) => {
-    let templateVars = { shortURL: req.params.shortURL, longURL:urlDatabase[req.params.shortURL] }
+    let templateVars = { shortURL: req.params.shortURL, longURL:urlDatabase[req.params.shortURL], username: req.cookies["username"] }
     res.render("urls_show", templateVars);
   });
 
@@ -68,6 +68,7 @@ app.get("/urls", (req, res) => {
     res.redirect("/urls");
   });
   app.get("/urls/:shortURL", (req, res) => {
+    let templateVars = {username: req.cookies["username"]}
     res.render(`/urls/${shortURL}`);
   });
 
@@ -76,7 +77,11 @@ app.get("/urls", (req, res) => {
     res.cookie("username", cookieOutput);
     res.redirect("/urls");
   });
-
+  app.post("/logout", (req, res) => {
+    let cookieOutput = req.body.username;
+    res.clearCookie('username')
+    res.redirect("/urls");
+  });
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
