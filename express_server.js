@@ -20,19 +20,37 @@ let urlDatabase = {
 };
 
 const users = { 
-  "userRandomID": {
-    id: "userRandomID", 
-    email: "user@example.com", 
+  "1": {
+    id: "1", 
+    email: "mr_popo@caramail.com", 
     password: "purple-monkey-dinosaur"
   },
- "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
+ "2": {
+    id: "2", 
+    email: "iamAUser@userdatabase.com", 
     password: "dishwasher-funk"
   }
 };
 
 
+const createUser = (email, password) => {
+
+  const userId = Object.keys(users).length + 1;
+
+  // create a new user object
+  const newUser = {
+    id: userId,
+    email: email,
+    password: password,
+  };
+  // add the user object to usersDb
+
+  users[userId] = newUser;
+
+  // return user id
+
+  return userId;
+};
 
 
 
@@ -83,7 +101,23 @@ app.get("/urls", (req, res) => {
   });
 
   // need to add a post end point for a new user getting registered
+  app.post('/register', (req, res) => {
 
+    const email = req.body.email;
+    const password = req.body.email;
+
+    const userId = createUser(email, password);
+  
+    // set the cookie with the user_id (cookie parser)
+    // res.cookie('user_id', userId);
+  
+    // set the cookie with the user_id (cookie session)
+    req.session.user_id = userId;
+  
+    // res.redirect
+  
+    res.redirect('/urls');
+  });
 
 
   app.post("/urls/:shortURL", (req, res) => {
