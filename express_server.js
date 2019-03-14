@@ -14,10 +14,25 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 
-var urlDatabase = {
+let urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
+
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk"
+  }
+};
+
+
 
 
 
@@ -61,12 +76,23 @@ app.get("/urls", (req, res) => {
     delete urlDatabase[shortURL];
     res.redirect("/urls");
   });
+
+  // adding render to register end point
+  app.get('/register', (req, res) => {
+    res.render("urls_register", { username: null });
+  });
+
+  // need to add a post end point for a new user getting registered
+
+
+
   app.post("/urls/:shortURL", (req, res) => {
     const shortURL = req.params.shortURL;
     const newlongURL = req.body.longURL;
     urlDatabase[shortURL] = newlongURL;
     res.redirect("/urls");
   });
+
   app.get("/urls/:shortURL", (req, res) => {
     let templateVars = {username: req.cookies["username"]}
     res.render(`/urls/${shortURL}`);
