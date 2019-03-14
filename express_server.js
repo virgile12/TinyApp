@@ -52,8 +52,8 @@ const createUser = (email, password) => {
 };
 
 checkEmail = (email) => {
-  for (let user in usersDb) {
-    if (usersDb[email] === email) {
+  for (let userGeneratedId in usersDb) {
+    if (usersDb[userGeneratedId]['email'] === email) {
       return false;
     }
   } 
@@ -80,12 +80,14 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-    let templateVars = { urls: urlDatabase, username: req.cookies["username"] };
+  const userId =  req.cookies['user_id'];
+    let templateVars = { urls: urlDatabase, user: usersDb[userId] };
     res.render("urls_index", templateVars);
   });
 
   app.get("/urls/:shortURL", (req, res) => {
-    let templateVars = { shortURL: req.params.shortURL, longURL:urlDatabase[req.params.shortURL], username: req.cookies["username"] }
+    const userId =  req.cookies['user_id'];
+    let templateVars = { shortURL: req.params.shortURL, longURL:urlDatabase[req.params.shortURL], user: usersDb[userId] }
     res.render("urls_show", templateVars);
   });
 
@@ -112,9 +114,9 @@ app.get("/urls", (req, res) => {
     const password = req.body.password;
   
     if (email === "" || password === "") {
-      res.status(400).send("Ivalid input: Please enter Email and Password again.");
+      res.status(400).send("Invalid input: Please enter Email and Password again.");
     } 
-     else if (checkEmail) {
+     else if (checkEmail()) {
       res.status(400).send("Email already registered !")
     } else {
    
@@ -128,6 +130,7 @@ app.get("/urls", (req, res) => {
   });
 
 
+
   app.post("/urls/:shortURL", (req, res) => {
     const shortURL = req.params.shortURL;
     const newlongURL = req.body.longURL;
@@ -136,8 +139,9 @@ app.get("/urls", (req, res) => {
   });
 
   app.get("/urls/:shortURL", (req, res) => {
-    let templateVars = {username: req.cookies["username"]}
-    res.render(`/urls/${shortURL}`);
+    const userId =  req.cookies['user_id'];
+    let templateVars = {user: usersDb[userId]};
+    res.render('urls_show');
   });
 
   app.post("/login", (req, res) => {
@@ -147,7 +151,7 @@ app.get("/urls", (req, res) => {
   });
   app.post("/logout", (req, res) => {
     let cookieOutput = req.body.username;
-    res.clearCookie('username')
+    res.clearCookie('username', cookieOutput)
     res.redirect("/urls");
   });
 app.get("/hello", (req, res) => {
