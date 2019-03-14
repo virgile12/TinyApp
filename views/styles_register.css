@@ -1,5 +1,4 @@
 .flex {
     display: flex;
-    justify-content: left;
-    align-items: left;
+    justify-content: flex-start;
 }

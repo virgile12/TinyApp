@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
 const PORT = 8080; // default port 8080
-app.use(cookieParser())
+app.use(cookieParser());
+
+
 
 function generateRandomString() {
  let output = Math.random().toString(36).substr(2, 5);
@@ -19,14 +22,14 @@ let urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-const users = { 
-  "1": {
-    id: "1", 
+const usersDb = { 
+  "4cbhg": {
+    id: "4cbhg", 
     email: "mr_popo@caramail.com", 
     password: "purple-monkey-dinosaur"
   },
- "2": {
-    id: "2", 
+ "7jkgl": {
+    id: "7jkgl", 
     email: "iamAUser@userdatabase.com", 
     password: "dishwasher-funk"
   }
@@ -35,23 +38,26 @@ const users = {
 
 const createUser = (email, password) => {
 
-  const userId = Object.keys(users).length + 1;
+  const userId =generateRandomString();
 
-  // create a new user object
   const newUser = {
     id: userId,
     email: email,
     password: password,
   };
-  // add the user object to usersDb
 
-  users[userId] = newUser;
-
-  // return user id
+  usersDb[userId] = newUser;
 
   return userId;
 };
 
+checkEmail = (email) => {
+  for (let user in usersDb) {
+    if (usersDb[email] === email) {
+      return false;
+    }
+  } 
+};
 
 
 app.get("/", (req, res) => {
@@ -102,20 +108,22 @@ app.get("/urls", (req, res) => {
 
   // need to add a post end point for a new user getting registered
   app.post('/register', (req, res) => {
-
     const email = req.body.email;
-    const password = req.body.email;
-
-    const userId = createUser(email, password);
+    const password = req.body.password;
   
-    // set the cookie with the user_id (cookie parser)
-    // res.cookie('user_id', userId);
+    if (email === "" || password === "") {
+      res.status(400).send("Ivalid input: Please enter Email and Password again.");
+    } 
+     else if (checkEmail) {
+      res.status(400).send("Email already registered !")
+    } else {
+   
+      const userId = createUser(email, password);
+      res.cookie('user_id', userId)
   
     // set the cookie with the user_id (cookie session)
-    req.session.user_id = userId;
-  
-    // res.redirect
-  
+    // req.session.user_id = userId;
+    }
     res.redirect('/urls');
   });
 
