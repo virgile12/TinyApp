@@ -18,7 +18,8 @@
     <% for (let url in urls) { %>
         <li style="display: flex;"><%= url %> - <a href= <%=  urls[url]  %>> <%= urls[url] %> </a>
           <form method="POST" action="/urls/<%= url %>/delete"> 
-            <div class="form-group mb-2"> <button type="submit" class="btn btn-primary">Delete</button> 
+            <div class="form-group mb-2"> 
+              <button type="submit" class="btn btn-primary">Delete</button> 
           </form>
           </div>
           <form method="GET" action="/urls/<%= url %>">
