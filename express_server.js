@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const PORT = 8080; // default port 8080
 app.use(cookieParser());
+app.use(express.static('public'))
 
 
 

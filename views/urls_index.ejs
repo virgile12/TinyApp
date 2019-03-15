@@ -12,21 +12,18 @@
   <a href="/urls">Home</a>
 </head>
 <body style="font-size:20px; padding:50px;">
-    
-    <h1>
-      <% include ./partials/_headers %>
-    </h1>
+    <% include ./partials/_headers %>
     <ul>
     <% for (let url in urls) { %>
         <li style="display: flex;"><%= url %> - <a href= <%=  urls[url]  %>> <%= urls[url] %> </a>
           <form method="POST" action="/urls/<%= url %>/delete"> 
             <div class="form-group mb-2"> 
-              <button type="submit" class="btn btn-primary">Delete</button> 
+              <button type="submit" class="btn btn-primary btn-space">Delete</button> 
           </form>
           </div>
           <form method="GET" action="/urls/<%= url %>">
             <div class="form-group mb-2"> 
-              <button type="submit" class="btn btn-primary">edit</button>
+              <button type="submit" class="btn btn-primary btn-space">edit</button>
             </div>
           </form>
         </li>

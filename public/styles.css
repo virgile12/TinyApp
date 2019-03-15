@@ -1,0 +1,9 @@
+.flex {
+    display: flex;
+    justify-content: flex-start;
+}
+.btn-space {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+
