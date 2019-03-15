@@ -105,7 +105,10 @@ app.get("/urls", (req, res) => {
 
   // adding render to register end point
   app.get('/register', (req, res) => {
-    res.render("urls_register", { username: null });
+    const userId =  req.cookies['user_id'];
+    let templateVars = {user: usersDb[userId]};
+    console.log(usersDb[userId])
+    res.render("urls_register", templateVars);
   });
 
   // need to add a post end point for a new user getting registered
