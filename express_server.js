@@ -165,7 +165,7 @@ app.get("/urls", (req, res) => {
 
   app.post("/login", (req, res) => {
 
-    const {email, password} = req.body
+    const {email, password} = req.body;
   
     if (email === "" || password === "") {
       res.status(400).send("Invalid input: Please enter Email and Password again.");
@@ -183,7 +183,7 @@ app.get("/urls", (req, res) => {
       }
     }
   });
-  
+
   app.post("/logout", (req, res) => {
     let cookieOutput = req.body.user_id;
     res.clearCookie('user_id', cookieOutput)
