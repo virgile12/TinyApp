@@ -59,6 +59,16 @@ checkIfEmailExists = (email) => {
 }
 }
 
+getUserFromEmail = (email) => {
+  for (let userId in usersDb) {
+    if (email === usersDb[userId]['email']) {
+      return usersDb[userId]
+    }
+  }
+}
+
+
+
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -147,6 +157,7 @@ app.get("/urls", (req, res) => {
   });
 
   app.get('/login', (req, res) => {
+    
     const userId =  req.cookies['user_id'];
     let templateVars = {user: usersDb[userId]};
     res.render("urls_login", templateVars);
@@ -154,28 +165,28 @@ app.get("/urls", (req, res) => {
 
   app.post("/login", (req, res) => {
 
-    const email = req.body.email;
-    const password = req.body.password;
+    const {email, password} = req.body
   
     if (email === "" || password === "") {
       res.status(400).send("Invalid input: Please enter Email and Password again.");
-    } else {
-   
-      const userId = createUser(email, password);
-      res.cookie('user_id', userId)
-    // res.cookie('user_id', userId)
-    // const { email } = req.params;
-    // const { password } = req.body;
-    // let cookieOutput = req.body.username;
-    // res.cookie("username", cookieOutput);
+    } else if (!checkIfEmailExists(email)) {
+      res.status(400).send("Invalid input:");
 
-    // usersDb[email].email = email;
-    // usersDb[password].password = password
-    res.redirect("/urls");
+    } else {
+      let user;
+      user = getUserFromEmail(email);
+      if (user.password === password) {
+        res.cookie('user_id', user.id)
+        res.redirect("/urls");
+      } else {
+        res.status(400).send("Incorrect Password!");
+      }
+    }
   });
+  
   app.post("/logout", (req, res) => {
-    let cookieOutput = req.body.username;
-    res.clearCookie('username', cookieOutput)
+    let cookieOutput = req.body.user_id;
+    res.clearCookie('user_id', cookieOutput)
     res.redirect("/urls");
   });
 app.get("/hello", (req, res) => {
