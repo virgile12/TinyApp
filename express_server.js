@@ -26,7 +26,7 @@ const usersDb = {
   "4cbhg": {
     id: "4cbhg", 
     email: "mr_popo@caramail.com", 
-    password: "purple-monkey-dinosaur"
+    password: "asd"
   },
  "7jkgl": {
     id: "7jkgl", 
@@ -51,13 +51,13 @@ const createUser = (email, password) => {
   return userId;
 };
 
-checkEmail = (email) => {
+checkIfEmailExists = (email) => {
   for (let userGeneratedId in usersDb) {
-    if (usersDb[userGeneratedId]['email'] === email) {
-      return false;
-    }
-  } 
-};
+    if (email === usersDb[userGeneratedId]['email']) {
+      return true
+    } 
+}
+}
 
 
 app.get("/", (req, res) => {
@@ -107,7 +107,6 @@ app.get("/urls", (req, res) => {
   app.get('/register', (req, res) => {
     const userId =  req.cookies['user_id'];
     let templateVars = {user: usersDb[userId]};
-    console.log(usersDb[userId])
     res.render("urls_register", templateVars);
   });
 
@@ -119,8 +118,8 @@ app.get("/urls", (req, res) => {
     if (email === "" || password === "") {
       res.status(400).send("Invalid input: Please enter Email and Password again.");
     } 
-     else if (checkEmail()) {
-      res.status(400).send("Email already registered !")
+     else if (checkIfEmailExists(email)) {
+      res.status(400).send("Email already Registered !");
     } else {
    
       const userId = createUser(email, password);
@@ -147,9 +146,31 @@ app.get("/urls", (req, res) => {
     res.render('urls_show');
   });
 
+  app.get('/login', (req, res) => {
+    const userId =  req.cookies['user_id'];
+    let templateVars = {user: usersDb[userId]};
+    res.render("urls_login", templateVars);
+  });
+
   app.post("/login", (req, res) => {
-    let cookieOutput = req.body.username;
-    res.cookie("username", cookieOutput);
+
+    const email = req.body.email;
+    const password = req.body.password;
+  
+    if (email === "" || password === "") {
+      res.status(400).send("Invalid input: Please enter Email and Password again.");
+    } else {
+   
+      const userId = createUser(email, password);
+      res.cookie('user_id', userId)
+    // res.cookie('user_id', userId)
+    // const { email } = req.params;
+    // const { password } = req.body;
+    // let cookieOutput = req.body.username;
+    // res.cookie("username", cookieOutput);
+
+    // usersDb[email].email = email;
+    // usersDb[password].password = password
     res.redirect("/urls");
   });
   app.post("/logout", (req, res) => {
