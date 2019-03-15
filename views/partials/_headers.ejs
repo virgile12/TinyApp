@@ -1,10 +1,5 @@
-<h1>Welcome to TinyApp</h1>
 <title>TinyApp</title>
-<br>
-</br>
-<a href="/urls">Home</a>
-
-
+<h1>TinyApp</h1>
 <% if (user && user.id) {%>
 <h1>Welcome : <%= user.email %></h1>
 <form method="POST" action="/logout">
@@ -13,5 +8,8 @@
   </div>
 </form>
 <%} else {%>
+  <br></br>
   <a href="/login">Login</a> |  <a href="/register">Register</a>
+  <br></br>
+
 <% } %>

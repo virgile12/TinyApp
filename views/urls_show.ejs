@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <a href="/urls">Home</a> <a href="/urls/new">Create new TinyUrl</a>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -12,7 +13,7 @@
     <h1>
       <% include ./partials/_headers %>
     </h1>
-    <a href="/urls">Home</a>
+    
     <h3> ShortUrl : <strong><%= shortURL %> </strong></h3>
   <form class="form-inline" action="/urls/<%= shortURL %>" method="POST">
     <div class="form-group mb-2">
