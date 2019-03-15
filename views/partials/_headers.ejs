@@ -1,6 +1,6 @@
 <a href="/urls">Home</a>
 <% if (user && user.id) {%>
-<h1>Welcome user_id : <%= user.id %></h1>
+<h1>Welcome : <%= user.email %></h1>
 <form method="POST" action="/logout">
   <div class="form-group"> 
     <button type="submit" class="btn btn-primary">Logout</button>
