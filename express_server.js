@@ -2,9 +2,12 @@ const express = require("express");
 const app = express();
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
-const PORT = 8080; // default port 8080
+const PORT = 8080; // default port 8080;
+const bcrypt = require('bcrypt');
+
 app.use(cookieParser());
-app.use(express.static('public'))
+app.use(express.static('public'));
+app.use(bcrypt());
 
 
 
