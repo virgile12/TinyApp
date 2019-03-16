@@ -23,7 +23,7 @@ let urlDatabase = {
   '9sm5xK' : { longURL: "http://www.google.com" , userId: "4cbhg" }
 };
 
-const usersDb = { 
+let usersDb = { 
   "4cbhg": {
     id: "4cbhg", 
     email: "mr_popo@caramail.com", 
@@ -128,25 +128,34 @@ app.get("/urls", (req, res) => {
 
   app.get("/urls/:shortURL", (req, res) => {
     const userId =  req.cookies['user_id'];
-    let templateVars = { shortURL: req.params.shortURL, longURL:urlDatabase[req.params.shortURL], user: usersDb[userId] }
+    let templateVars = { 
+      user: usersDb[userId], 
+      shortURL: req.params.shortURL, 
+      longURL: urlDatabase[req.params.shortURL], 
+    }
     res.render("urls_show", templateVars);
   });
 
 
   app.get("/u/:shortURL", (req, res) => {
-    const longURL = urlDatabase[req.params.shortURL]
-    res.redirect(longURL);
+    const longURL = urlDatabase[req.params.shortURL].longURL;
+    res.redirect(`http://${longURL}`);
   });
 
   app.post("/urls/:shortURL/delete", (req, res) => {
-    const shortURL = req.params.shortURL;
-    delete urlDatabase[shortURL];
-    res.redirect("/urls");
+    let userId = req.cookies.user_id;
+    
+    if (userId && userId === urlDatabase[req.params.shortURL].userId) {
+      delete urlDatabase[req.params.shortURL];
+      res.redirect("/urls");
+    } else {
+      res.status(403).send("Access Forbidden")
+    }
   });
 
   // adding render to register end point
   app.get('/register', (req, res) => {
-    const userId =  req.cookies['user_id'];
+    let userId =  req.cookies['user_id'];
     let templateVars = {user: usersDb[userId]};
     res.render("urls_register", templateVars);
   });
@@ -173,12 +182,17 @@ app.get("/urls", (req, res) => {
   });
 
 
-
+// this edit
   app.post("/urls/:shortURL", (req, res) => {
-    const shortURL = req.params.shortURL;
-    const newlongURL = req.body.longURL;
-    urlDatabase[shortURL]['longURL'] = newlongURL;
-    res.redirect("/urls");
+    let userId = req.cookies.user_id;
+    let shortURL = req.params.shortURL;
+    let newlongURL = req.body.longURL;
+    if (userId && userId === urlDatabase[shortURL].userId) {
+      urlDatabase[shortURL]['longURL'] = newlongURL;
+      res.redirect("/urls");
+    } else {
+      res.status(403).send("Access Forbidden")
+    }
   });
 
   app.get("/urls/:shortURL", (req, res) => {
