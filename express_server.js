@@ -7,7 +7,8 @@ const bcrypt = require('bcrypt');
 
 app.use(cookieParser());
 app.use(express.static('public'));
-app.use(bcrypt());
+
+
 
 
 
@@ -30,12 +31,13 @@ let usersDb = {
   "4cbhg": {
     id: "4cbhg", 
     email: "mr_popo@caramail.com", 
-    password: "asd"
+    password: bcrypt.hashSync('asd', 10)
+    
   },
  "7jkgl": {
     id: "7jkgl", 
     email: "iamAUser@userdatabase.com", 
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync("dishwasher-funk" , 10)
   }
 };
 
@@ -47,7 +49,7 @@ const createUser = (email, password) => {
   const newUser = {
     id: userId,
     email: email,
-    password: password,
+    password: bcrypt.hashSync(password , 10)
   };
 
   usersDb[userId] = newUser;
@@ -177,9 +179,6 @@ app.get("/urls", (req, res) => {
    
       const userId = createUser(email, password);
       res.cookie('user_id', userId)
-  
-    // set the cookie with the user_id (cookie session)
-    // req.session.user_id = userId;
     }
     res.redirect('/urls');
   });
