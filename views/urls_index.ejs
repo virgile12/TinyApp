@@ -13,9 +13,11 @@
 </head>
 <body style="font-size:20px; padding:50px;">
     <% include ./partials/_headers %>
+
+    <h2><a href='urls/new'>Create Tiny Url</a></h2>
     <ul>
     <% for (let url in urls) { %>
-        <li style="display: flex;"><%= url %> - <a href= <%=  urls[url]  %>> <%= urls[url] %> </a>
+        <li style="display: flex;"><%= url %> - <a href= '<%=  urls[url].longURL  %>'> <%= urls[url].longURL %> </a>
           <form method="POST" action="/urls/<%= url %>/delete"> 
             <div class="form-group mb-2"> 
               <button type="submit" class="btn btn-primary btn-space">Delete</button> 
