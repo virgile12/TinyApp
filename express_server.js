@@ -20,7 +20,7 @@ app.set("view engine", "ejs");
 
 let urlDatabase = {
   'b2xVn2' : { longURL: "http://www.lighthouselabs.ca", userId: "4cbhg",},
-  '9sm5xK' : { longURL: "http://www.google.com" , userId: "7jkgl" }
+  '9sm5xK' : { longURL: "http://www.google.com" , userId: "4cbhg" }
 };
 
 const usersDb = { 
@@ -68,7 +68,16 @@ getUserFromEmail = (email) => {
   }
 }
 
-const urlsForuser = () => {}
+const urlsForUser = (userId) => {
+  let filteredUrls = {};
+  for (let shortUrlKey in urlDatabase) {
+    if (userId === urlDatabase[shortUrlKey].userId) {
+       filteredUrls[shortUrlKey] = urlDatabase[shortUrlKey]
+    }
+  }
+  return filteredUrls;
+
+}
 
 
 
@@ -105,10 +114,14 @@ app.post("/urls", (req, res) => {
 
 app.get("/urls", (req, res) => {
   const userId =  req.cookies['user_id'];
-    let templateVars = { urls: urlDatabase, user: usersDb[userId] };
+    let templateVars = { 
+      user: usersDb[userId], 
+      urls: urlDatabase,
+    };
     if (!userId) {
       res.redirect('/login')
     } else {
+      templateVars.urls = urlsForUser(userId)
     res.render("urls_index", templateVars);
     }
   });
