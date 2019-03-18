@@ -32,30 +32,32 @@ let urlDatabase = {
   'b2xVn2' : { longURL: "http://www.lighthouselabs.ca", userId: "4cbhg",},
   '9sm5xK' : { longURL: "http://www.google.com" , userId: "4cbhg" }
 };
-
+// ** PLZ ADD HASH FUNCTION
 let usersDb = { 
   "4cbhg": {
     id: "4cbhg", 
     email: "mr_popo@caramail.com", 
-    password: bcrypt.hashSync("asd", 10)
+    password: "asd"
     
   },
  "7jkgl": {
     id: "7jkgl", 
     email: "iamAUser@userdatabase.com", 
-    password: bcrypt.hashSync("asd2", 10)
+    password: "asd2"
  }
 };
+// IMPLEMENT CALLBACK HASH FUNCTION
+let hash = bcrypt.hashSync('myPassword', 10);
 
-
+// FIX HASH IMPLEMENTATION
 const createUser = (email, password) => {
 
-  const userId =generateRandomString();
-
+  const userId = generateRandomString();
+  let hash = bcrypt.hashSync(password, 10);
   const newUser = {
     id: userId,
     email: email,
-    password: password
+    password: hash,
   };
   usersDb[userId] = newUser;
 
@@ -87,6 +89,15 @@ const urlsForUser = (userId) => {
   }
   return filteredUrls;
 
+}
+
+const authenticate = (email, password) => {
+  const usersArray = Object.values(usersDb);
+  for (let user in usersArray) {
+    if (usersArray[user].email === email && bcrypt.compareSync(password, usersArray[user].password)) {
+      return true;
+    }
+  }
 }
 
 
@@ -170,7 +181,7 @@ app.get("/urls", (req, res) => {
     res.render("urls_register", templateVars);
   });
 
-  // need to add a post end point for a new user getting registered
+  // FIX HASH IMPLEMENTATION
   app.post('/register', (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
@@ -188,7 +199,7 @@ app.get("/urls", (req, res) => {
   });
 
 
-// this edit
+
   app.post("/urls/:shortURL", (req, res) => {
     let userId = req.session.user_id
     let shortURL = req.params.shortURL;
@@ -214,10 +225,14 @@ app.get("/urls", (req, res) => {
     res.render("urls_login", templateVars);
   });
 
+// PLZ FIX HASH PASSWORD IMPLEMENTATION IN LOGIN
   app.post("/login", (req, res) => {
+    // const {email, password} = req.body;
 
-    const {email, password} = req.body;
-    let hashword = bcrypt.hashSync(password, 10)
+    
+    const email = req.body.password;
+    const password = req.body.password;
+    
   
     if (email === "" || password === "") {
       res.status(400).send("Invalid input: Please enter Email and Password again.");
@@ -227,7 +242,7 @@ app.get("/urls", (req, res) => {
     } else {
       let user;
       user = getUserFromEmail(email);
-      if (user.password === hashword) {
+      if (bcrypt.compareSync( password, hash)) {
         req.session.user_id = user
         res.redirect("/urls");
       } else {
