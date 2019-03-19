@@ -4,8 +4,8 @@
 
 ## Final Product
 
-!["Main_page"](tinyAppProject-w2d2/docs/Urls_Register.png)
-!["Register_Page"])(tinyAppProject-w2d2/docs/Urls_main.png)
+!["Main_page"](https://github.com/virgile12/tinyAppProject-w2d2/blob/master/docs/Urls_Register.png)
+!["Register_Page"])(https://github.com/virgile12/tinyAppProject-w2d2/blob/master/docs/Urls_main.png)
 
 ## Dependencies used: 
 
