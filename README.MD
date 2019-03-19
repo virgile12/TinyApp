@@ -4,8 +4,8 @@
 
 ## Final Product
 
-!["Main_page"](#)
-!["Register_Page"])(#)
+!["Main_page"](tinyAppProject-w2d2/docs/Urls_Register.png)
+!["Register_Page"])(tinyAppProject-w2d2/docs/Urls_main.png)
 
 ## Dependencies used: 
 
