@@ -47,17 +47,17 @@ let usersDb = {
  }
 };
 // IMPLEMENT CALLBACK HASH FUNCTION
-let hash = bcrypt.hashSync('myPassword', 10);
+// let hash = bcrypt.hashSync('myPassword', 10);
 
 // FIX HASH IMPLEMENTATION
 const createUser = (email, password) => {
 
   const userId = generateRandomString();
-  let hash = bcrypt.hashSync(password, 10);
+  // let hash = bcrypt.hashSync(password, 10);
   const newUser = {
     id: userId,
     email: email,
-    password: hash,
+    password: bcrypt.hashSync(password, 10)
   };
   usersDb[userId] = newUser;
 
@@ -91,14 +91,14 @@ const urlsForUser = (userId) => {
 
 }
 
-const authenticate = (email, password) => {
-  const usersArray = Object.values(usersDb);
-  for (let user in usersArray) {
-    if (usersArray[user].email === email && bcrypt.compareSync(password, usersArray[user].password)) {
-      return true;
-    }
-  }
-}
+// const authenticate = (email, password) => {
+//   const usersArray = Object.values(usersDb);
+//   for (let user in usersArray) {
+//     if (usersArray[user].email === email && bcrypt.compareSync(password, usersArray[user].password)) {
+//       return true;
+//     }
+//   }
+// }
 
 
 
@@ -143,6 +143,9 @@ app.get("/urls", (req, res) => {
       res.redirect('/login')
     } else {
       templateVars.urls = urlsForUser(userId)
+      console.log("test userId main", userId)
+      console.log("user", templateVars.user)
+      console.log("check database", usersDb)
     res.render("urls_index", templateVars);
     }
   });
@@ -150,7 +153,7 @@ app.get("/urls", (req, res) => {
   app.get("/urls/:shortURL", (req, res) => {
     const userId =  req.session.user_id
     let templateVars = { 
-      user: usersDb[userId], 
+      user: usersDb[userId],
       shortURL: req.params.shortURL, 
       longURL: urlDatabase[req.params.shortURL], 
     }
@@ -192,10 +195,13 @@ app.get("/urls", (req, res) => {
      else if (checkIfEmailExists(email)) {
       res.status(400).send("Email already Registered !");
     } else {
+
       let userId = createUser(email, password);
+      console.log("check userId Register", userId)
       req.session.user_id = userId
-    } 
+     
     res.redirect('/urls');
+    }
   });
 
 
@@ -230,20 +236,21 @@ app.get("/urls", (req, res) => {
     // const {email, password} = req.body;
 
     
-    const email = req.body.password;
+    const email = req.body.email;
     const password = req.body.password;
     
   
     if (email === "" || password === "") {
       res.status(400).send("Invalid input: Please enter Email and Password again.");
     } else if (!checkIfEmailExists(email)) {
+      console.log(usersDb)
+      console.log("testing", email)
       res.status(400).send("Invalid input:");
 
     } else {
-      let user;
-      user = getUserFromEmail(email);
-      if (bcrypt.compareSync( password, hash)) {
-        req.session.user_id = user
+      let user = getUserFromEmail(email);
+      if (bcrypt.compareSync( password, user.password)) {
+        req.session.user_id = user.id
         res.redirect("/urls");
       } else {
         res.status(400).send("Incorrect Password!");
@@ -252,7 +259,6 @@ app.get("/urls", (req, res) => {
   });
 
   app.post("/logout", (req, res) => {
-    req.body.user_id;
     req.session = null;
     res.redirect("/urls");
   });

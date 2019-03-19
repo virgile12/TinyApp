@@ -15,9 +15,9 @@
     <% include ./partials/_headers %>
 
     <h2><a href='urls/new'>Create Tiny Url</a></h2>
-    <ul>
+    <ul style="padding: 20px;">
     <% for (let url in urls) { %>
-        <li style="display: flex;"><%= url %> - <a href= '<%=  urls[url].longURL  %>'> <%= urls[url].longURL %> </a>
+        <li style="display: flex"><%= url %> - <a href= '<%=  urls[url].longURL  %>'> <%= urls[url].longURL %> </a>
           <form method="POST" action="/urls/<%= url %>/delete"> 
             <div class="form-group mb-2"> 
               <button type="submit" class="btn btn-primary btn-space">Delete</button> 
