@@ -4,6 +4,9 @@
 
 ## Final Product
 
+!["Main_page"](#)
+!["Register_Page"])(#)
+
 ## Dependencies used: 
 
 - "bcrypt": "2.0.0", 

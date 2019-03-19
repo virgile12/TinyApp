@@ -105,7 +105,7 @@ app.post("/urls", (req, res) => {
     urlDatabase[shortURL] = { longURL : longURL, userId: userId};
     res.redirect(`/urls/${shortURL}`);
     } else {
-    res.redirect('/login')l
+    res.redirect('/login');
   }
 });
 
