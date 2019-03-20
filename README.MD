@@ -20,3 +20,4 @@
 
 - Install all dependecies used (use the `Npm install "Depedency"` command)
 - Run the development web server using the `node express_server.js` command.
+- Access app by typing localhost:8080/
